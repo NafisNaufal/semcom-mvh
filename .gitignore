@@ -1,0 +1,27 @@
+# data & checkpoints (large / regenerable)
+data/
+*.pt
+*.pth
+*.ckpt
+
+# third-party method clones (see experiments/INTEGRATION.md)
+Deep-JSCC-PyTorch/
+WITT/
+methods/
+
+# logs & LaTeX build artifacts
+*.log
+*.aux
+*.bbl
+*.blg
+*.out
+*.synctex.gz
+
+# python
+__pycache__/
+*.pyc
+.venv/
+
+# never commit credentials
+*.token
+.env

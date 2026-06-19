@@ -1,0 +1,230 @@
+\documentclass[conference]{IEEEtran}
+\usepackage{cite}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{url}
+\IEEEoverridecommandlockouts
+
+\begin{document}
+
+\title{Fragmented but Not Flipped: A Controlled Re-Evaluation of
+Semantic-Communication Methods and a Minimal Viable Harness}
+
+\author{
+\IEEEauthorblockN{Nafis Naufal Rahman}
+\IEEEauthorblockA{Department of Informatics Engineering\\
+Universitas Brawijaya, Malang, Indonesia\\
+nafisnaufal1426@student.ub.ac.id}
+\and
+\IEEEauthorblockN{Dionisius Seraf Saputra}
+\IEEEauthorblockA{Department of Information Systems\\
+Universitas Brawijaya, Malang, Indonesia\\
+dionisiusve32@student.ub.ac.id}}
+
+\maketitle
+
+\begin{abstract}
+Semantic-communication research evaluates methods with mutually incompatible harnesses:
+across a citation-ranked sample of 21 papers we find 31 distinct quality metrics (21 used
+by a single paper), an empty intersection of signal-to-noise-ratio ranges across
+image-domain papers, no preprocessing specified in 15 of 21, and the de-facto baseline
+DeepJSCC used explicitly by only 3 of 11 image papers. To test whether this fragmentation
+changes conclusions, we conduct a pre-registered controlled re-evaluation of two
+methods---a convolutional and a Swin-transformer joint source--channel coding system---under
+two harness configurations drawn verbatim from surveyed papers, one ranked by structural
+similarity and one by downstream classification accuracy. The ranking does not invert: the
+transformer dominates the convolutional method under both configurations, with margins well
+beyond the pre-registered noise floor. For this pair, the risk of fragmentation is therefore
+not silent rank inversion but unverifiable incomparability---the field cannot confirm whether
+such robustness holds generally. We propose and release a minimal viable evaluation harness
+that restores comparability and lets others test whether the result generalizes.
+\end{abstract}
+
+\begin{IEEEkeywords}
+semantic communications, evaluation benchmark, reproducibility,
+joint source--channel coding, rank inversion, robustness
+\end{IEEEkeywords}
+
+\section{Introduction}\label{sec:intro}
+Under a controlled common evaluation harness, the ranking of two semantic-communication
+(SemCom) methods is stable across two distinct harness configurations---one ranked by
+structural similarity (SSIM), the other by downstream classification accuracy: a
+Swin-transformer joint source--channel coding (JSCC) method dominates a convolutional one
+regardless of channel, SNR range, or metric. For this pair, the danger of evaluation
+fragmentation is therefore not silent rank inversion but \emph{unverifiable
+incomparability}: with 31 distinct metrics across surveyed papers and no overlapping
+signal-to-noise-ratio (SNR) range, the field cannot confirm whether such robustness holds
+generally. We quantify this fragmentation across a citation-ranked sample of 21 papers:
+31 distinct quality metrics (21 used by a single paper), an empty intersection of SNR
+ranges across image-domain papers, no preprocessing specified in 15 of 21, and
+DeepJSCC~\cite{deepjscc} used as an explicit baseline in only 3 of 11 image papers. We
+contribute: (i)~a quantified fragmentation analysis; (ii)~a pre-registered controlled
+re-evaluation testing for rank inversion under harness variation; and (iii)~a minimal
+viable evaluation harness.
+
+\section{Related Work}\label{sec:related}
+Semantic communication has converged on de-facto baselines---DeepSC~\cite{deepsc}
+for text and DeepJSCC~\cite{deepjscc} for images---but not on a common evaluation
+harness around them. Existing benchmarks do not close this gap.
+6G-Bench~\cite{sixgbench} evaluates foundation-model reasoning over network decision
+tasks rather than joint source--channel transmission, and is therefore orthogonal to
+image- and text-domain SemCom evaluation. Recent roadmaps list a unified evaluation
+methodology as a future requirement rather than delivering one. Our gap-killer search
+found no candidate satisfying all three criteria simultaneously: a fixed reusable
+transmission protocol, explicit adoption by five or more subsequent works, and
+publication after 2022 (see Section~\ref{sec:frag} for methodology). Survey papers
+assert this standardization gap as the field's principal obstacle~\cite{comst,nso}
+but propose no concrete protocol. This paper supplies the missing quantification of
+the gap, a demonstration of its consequences, and a minimal protocol to close it.
+
+\section{Fragmentation Analysis}\label{sec:frag}
+We assembled a citation-ranked sample of SemCom papers from Semantic Scholar,
+stratified by year---the 15 most-cited for 2022--2023, the 10 most-cited for 2024,
+and the 10 most recent for 2025--2026---including only papers that report quantitative
+results with a specified evaluation setup, and excluding surveys and zero-result
+papers. Harness fields were extracted verbatim from each full text, yielding 21 papers
+with extractable harnesses from a 35-paper frame; the remaining 14 (10 inaccessible,
+4 reporting no original evaluation harness) are preserved as labeled slots in the
+released table~\cite{repo}. Table~\ref{tab:frag} shows six representative rows spanning
+the three strata. The same frame supplied the gap-killer search of
+Section~\ref{sec:related}: no candidate satisfied a reusable protocol, five-or-more
+adopters, and post-2022 publication simultaneously.
+
+The harness is fragmented on every axis. \emph{Metrics (F1):} the 21 papers employ
+31 distinct quality metrics; 21 appear in exactly one paper and only six in three or
+more. A single primary metric is explicitly declared in just 5 papers, while 13 report
+multiple metrics with no stated hierarchy and 3 optimize a system objective
+incommensurable with fidelity or task metrics. \emph{SNR (F2):} reported SNR ranges
+across image-domain papers have an \emph{empty} common intersection---their union
+spans $[-3,21]$~dB, yet no single value is evaluated by all.
+\emph{Preprocessing (F3):} 15 of 21 papers specify no preprocessing and only 2 specify
+it fully. \emph{Baselines (F4):} the de-facto image baseline DeepJSCC is used as an
+\emph{explicit} baseline in only 3 of 11 image-domain papers.
+
+Harness variance alone is expected in a young field. Section~\ref{sec:inversion} tests
+whether it changes conclusions; for the pair examined, the ranking is stable, so the cost
+is incomparability rather than demonstrated inversion.
+
+\begin{table*}[t]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\caption{Representative evaluation-harness fragmentation (6 of 21 papers; full table in supplement~\cite{repo}).}
+\label{tab:frag}
+\begin{tabular}{@{}lllllll@{}}
+\toprule
+Paper (year) & Domain & Channel & SNR (dB) & Primary metric & Baseline(s) & Preproc. \\
+\midrule
+DeepJSCC-SemCom~\cite{djscc_semcom} ('22) & Image & AWGN & 0--20 & PSNR (+MS-SSIM, LPIPS, top-1) & BPG+polar, H.265 & No \\
+DeepSC-Speech~\cite{deepsc_speech} ('22) & Speech & AWGN+Rayleigh & 5--10 & WER, MCD & DeepSC-SR & Yes \\
+Diffusion-JSCC~\cite{diffusion_jscc} ('24) & Image & AWGN+Rayleigh+MIMO & 3--12 & PSNR/SSIM/LPIPS/FID/CLIP & CDDM & Partial \\
+LLM-PHY~\cite{llm_phy} ('24) & PHY/CSI & MIMO-OFDM (AWGN) & 5--20\,/\,0--25 & NMSE & --- (unnamed) & No \\
+DSRDM~\cite{dsrdm} ('26) & Image & AWGN+Rician & 0--20 & BER & 16/256-QAM & No \\
+TONIC~\cite{tonic} ('26) & Image & AWGN+Rayleigh+Rician & 0--12 & Classification accuracy & DeepJSCC, JPEG & No \\
+\midrule
+\textbf{Aggregate ($n{=}21$)} & --- & --- & $\cap=\emptyset$ & 31 distinct; 5 declared & DeepJSCC: 3/11 & None: 15/21 \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\section{Controlled Re-Evaluation Under Harness Variation}\label{sec:inversion}
+To test whether harness fragmentation changes conclusions, we re-evaluate two methods
+under two harness configurations drawn verbatim from surveyed papers. The experiment
+was pre-registered on 2026-06-07 (UTC), before any result was produced, fixing the
+hypotheses, both configurations, and the decision rule. We compare M1, the canonical
+CNN DeepJSCC~\cite{deepjscc}, against M2, the Swin-transformer WITT~\cite{witt}, on a
+shared CIFAR-10 substrate.
+
+Both methods transmit through a single shared channel module rather than their native
+implementations, which differ in noise convention and fading model. The shared channel
+applies identical per-symbol complex fading with perfect-CSI zero-forcing equalization
+and Rician $K=1$, so any measured difference reflects the method or the harness, not an
+incidental channel implementation. Config~A reproduces the harness of~\cite{recvit}:
+AWGN and Rayleigh channels, SNR 2--12~dB, ranked by SSIM. Config~B
+reproduces~\cite{tonic}: AWGN, Rayleigh, and Rician channels, SNR 0--12~dB, ranked by
+top-1 classification accuracy on reconstructed images. Both configurations are taken
+cell-for-cell from rows of Table~\ref{tab:frag} and were registered before measurement;
+they therefore cannot have been chosen to manufacture the outcome, and differ only along
+axes that real papers vary.
+
+A rank inversion is declared only if the winning method differs between configurations by
+more than the pre-registered noise floor---0.5~dB PSNR-equivalent or 2\% absolute
+accuracy---over three seeds. The measured means (Table~\ref{tab:inv}) are: Config~A SSIM
+$0.8321\pm0.0013$ (M1) vs.\ $0.8964\pm0.0006$ (M2); Config~B accuracy $0.4359\pm0.0140$
+(M1) vs.\ $0.6649\pm0.0073$ (M2). The ranking does \emph{not} flip---M2 wins both---so the
+hypothesis is \textbf{not confirmed}. This is not an insensitive-test artifact: both
+between-method margins far exceed their floors (Config~A: SSIM $0.0643$ vs.\ $0.0020$,
+PSNR $2.775$~dB vs.\ $0.5$; Config~B: accuracy $0.229$ vs.\ $0.0223$). Scope is one method
+pair: the transformer's advantage over the CNN proved robust to the metric and channel
+axes varied here; whether it generalizes is what a standardized harness would let others
+test.
+
+\begin{table}[t]
+\centering
+\footnotesize
+\caption{Method ranking under two real-paper-derived harnesses (Config~A: AWGN+Rayleigh, 2--12~dB; Config~B: AWGN+Rayleigh+Rician, 0--12~dB). Mean over 3 seeds; bold marks the better method per column. Rank inversion \textbf{NOT CONFIRMED}: the winner (M2) does not flip, and both margins exceed the noise floor (0.5~dB PSNR-eq.\,/\,2\% acc.).}
+\label{tab:inv}
+\begin{tabular}{@{}lcc@{}}
+\toprule
+Method & Config~A: SSIM~$\uparrow$ & Config~B: Top-1 acc.~$\uparrow$ \\
+\midrule
+M1 --- DeepJSCC~\cite{deepjscc} & $0.8321\pm0.0013$ & $0.4359\pm0.0140$ \\
+M2 --- WITT~\cite{witt}         & $\mathbf{0.8964\pm0.0006}$ & $\mathbf{0.6649\pm0.0073}$ \\
+\midrule
+\textbf{Winner} & \textbf{M2} & \textbf{M2} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Proposed Harness Framework}\label{sec:mvh}
+The four fragmentation axes admit a direct remedy: a Minimal Viable Harness (MVH) that
+mandates exactly one specification per axis (Table~\ref{tab:mvh}). MVH is deliberately
+minimal---five fields, not a heavyweight benchmark---so adoption costs little: a fixed
+dataset and channel set, a declared SNR grid, one declared primary metric with a
+mandatory secondary, a named baseline including DeepJSCC, and an explicit preprocessing
+specification. Each field is the cure for a quantified Section~\ref{sec:frag} finding
+rather than an arbitrary choice. Two modality profiles instantiate it: an \emph{image}
+profile (CIFAR-10/Kodak; PSNR or SSIM primary with a perceptual secondary) and a
+\emph{text} profile (BLEU primary with a semantic-similarity secondary). Reporting both
+a distortion and a task metric, as MVH requires, lets readers see at a glance whether a
+method's advantage is metric-dependent---the question Section~\ref{sec:inversion} answers
+for one pair. We release a reference
+implementation---the shared channel and evaluation code---as a contribution, lowering
+adoption to a drop-in import.
+
+\begin{table}[t]
+\centering
+\footnotesize
+\caption{Minimal Viable Harness: each mandated field cures a fragmentation finding.}
+\label{tab:mvh}
+\begin{tabular}{@{}p{1.6cm}p{3.4cm}p{2.0cm}@{}}
+\toprule
+Mandated field & Specification & Cures \\
+\midrule
+Dataset \& channel & Fixed public dataset; AWGN+Rayleigh (+Rician) & F2 + F4 (shared substrate) \\
+SNR grid & Declared fixed dB test points & F2 (SNR $\cap=\emptyset$) \\
+Primary + secondary metric & One declared primary + $\geq 1$ mandatory secondary & F1 (31 metrics; 5 declared) \\
+Baseline & DeepJSCC mandatory, config reported & F4 (3/11 image) \\
+Preprocessing & Explicit normalization/resize/aug & F3 (15/21 none) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Conclusion}\label{sec:conc}
+We quantified semantic-communication evaluation fragmentation across four axes---31
+distinct metrics (21 used once), an empty SNR intersection across image-domain papers,
+preprocessing unspecified in 15 of 21 papers, and DeepJSCC an explicit baseline in only
+3 of 11 (C1). A pre-registered controlled re-evaluation found \emph{no} rank inversion for
+the tested pair: a transformer JSCC method outranked a CNN under both an SSIM- and an
+accuracy-based harness, with margins well beyond the noise floor (C2). We proposed and
+released a minimal viable harness that restores comparability (C3). This does not
+establish field-wide robustness---it tests one pair under one shared harness; the harness
+is what would let others test more pairs and verify whether this robustness generalizes.
+Limitations: one method pair, the image domain, and an analog-symbol channel approximation.
+
+\bibliographystyle{IEEEtran}
+\bibliography{main}
+
+\end{document}
