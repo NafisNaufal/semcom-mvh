@@ -27,7 +27,6 @@ harnesses. We:
 ## Layout
 
 ```
-paper/        IEEE conference paper (main.tex, main.bib, IEEEtran.*, main.pdf)
 harness/      MVH reference implementation:
               shared_channel.py        one shared channel (AWGN/Rayleigh/Rician, per-symbol
                                        complex fading, ZF equalization) for BOTH methods
@@ -53,5 +52,7 @@ analysis/     35-row fragmentation frame, pre-registration, Step-3 design, resul
 
 ## Citing
 
-Please cite the paper (see `paper/main.bib`). The two evaluated methods retain their
-own licenses; this repository redistributes only our harness, scripts, and results.
+Please cite the accompanying paper, *"Fragmented but Not Flipped: A Controlled
+Re-Evaluation of Semantic-Communication Methods and a Minimal Viable Harness"* (see the
+published/arXiv version for the canonical BibTeX entry). The two evaluated methods retain
+their own licenses; this repository redistributes only our harness, scripts, and results.
